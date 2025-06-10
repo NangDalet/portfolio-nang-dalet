@@ -75,7 +75,7 @@ export default function Hero() {
                     </div>
                   ) : (
                     <Image
-                      src="/images/profile.jpg"
+                      src="/profile.jpg"
                       alt="Nang Dalet - API Developer"
                       width={320}
                       height={320}
