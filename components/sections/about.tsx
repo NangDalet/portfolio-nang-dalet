@@ -34,12 +34,12 @@ export default function About() {
   const experiences = [
     {
       title: "API Developer",
-      company: "UDaya Technology CO LTD",
+      company: "Udaya Technology CO LTD",
       period: "Aug 2023 - Present",
       location: "Phnom Penh, Cambodia",
       description:
-        "Building and maintaining scalable APIs using Java Spring Boot and MySQL. Leading microservices architecture upgrades and integrating with multiple third-party services.",
-      highlights: ["Java Spring Boot", "MySQL", "Microservices", "API Integration"],
+        "Using Java and Spring Boot to maintain systems and build APIs, with MySQL as the database. Worked on projects including Visit Angkor System, Vireak Buntham Express, VET Ticket System, and VET Agency. Supported team in integrating with Red Bus and VET Digital Bus. Contributed to upgrading systems to microservices architecture for Room Management System (Backend and Mobile APIs) and transformed Vireak Buntham Express API system into microservices.",
+      highlights: ["Java", "Spring Boot", "MySQL", "Microservices", "API Integration", "Red Bus", "VET Digital Bus"],
       current: true,
     },
     {
@@ -47,7 +47,7 @@ export default function About() {
       company: "Centric Kernel CO LTD",
       period: "May 2023 - Aug 2023",
       location: "Phnom Penh, Cambodia",
-      description: "Developed POS systems for restaurants and coffee shops using C#, ASP.NET Core, and SQL Server.",
+     description:"Using C#, JavaScript, jQuery, ASP.NET Core Web API, and ASP.NET Core MVC to maintain systems, with SQL Server for database management. Worked on projects including POS systems for restaurants, coffee shops, and stock management.",
       highlights: ["C#", "ASP.NET Core", "SQL Server", "POS Systems"],
     },
     {
@@ -55,7 +55,8 @@ export default function About() {
       company: "Blue Technology CO LTD",
       period: "Dec 2022 - Feb 2023",
       location: "Phnom Penh, Cambodia",
-      description: "Built HR and inventory management systems using C# and ASP.NET Framework.",
+      description:
+        "Using C# and ASP.NET Framework to maintain systems, with SQL Server for database management. Worked on projects including building human resource systems.",
       highlights: ["C#", "ASP.NET Framework", "HR Systems", "Inventory Management"],
     },
   ]
