@@ -47,7 +47,8 @@ export default function About() {
       company: "Centric Kernel CO LTD",
       period: "May 2023 - Aug 2023",
       location: "Phnom Penh, Cambodia",
-     description:"Using C#, JavaScript, jQuery, ASP.NET Core Web API, and ASP.NET Core MVC to maintain systems, with SQL Server for database management. Worked on projects including POS systems for restaurants, coffee shops, and stock management.",
+      description:
+        "Using C#, JavaScript, jQuery, ASP.NET Core Web API, and ASP.NET Core MVC to maintain systems, with SQL Server for database management. Worked on projects including POS systems for restaurants, coffee shops, and stock management.",
       highlights: ["C#", "ASP.NET Core", "SQL Server", "POS Systems"],
     },
     {
@@ -59,6 +60,17 @@ export default function About() {
         "Using C# and ASP.NET Framework to maintain systems, with SQL Server for database management. Worked on projects including building human resource systems.",
       highlights: ["C#", "ASP.NET Framework", "HR Systems", "Inventory Management"],
     },
+  ]
+
+  const trainings = [
+    { name: "ASP.NET CORE MVC", year: "2019-2024" },
+    { name: "ASP.NET CORE WEB API", year: "2019-2024" },
+    { name: "Laravel", year: "2019-2024" },
+    { name: "Spring Core", year: "2019-2024" },
+    { name: "Microservice Level 1", year: "2019-2024" },
+    { name: "Microservice Level 2", year: "2019-2024" },
+    { name: "Springboot (API)", year: "2019-2024" },
+    { name: "MySQL", year: "2019-2024" },
   ]
 
   const interests = [
@@ -222,6 +234,42 @@ export default function About() {
                 </Card>
               ))}
             </div>
+          </motion.div>
+
+          {/* Training Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+            viewport={{ once: true }}
+            className="mb-16"
+          >
+            <h3 className="text-2xl font-bold mb-8 text-center">Training Courses</h3>
+            <Card className="border-2 hover:shadow-lg transition-all duration-300">
+              <CardContent className="p-8">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="p-3 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-xl">
+                    <GraduationCap className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold mb-2">Technical Training</h4>
+                    <Badge variant="secondary">2019 - 2024</Badge>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                  {trainings.map((training, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 p-3 rounded-md bg-muted/50 hover:bg-muted transition-colors"
+                    >
+                      <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+                      <span className="font-medium">{training.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
 
           {/* Interests Section */}

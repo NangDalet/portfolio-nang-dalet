@@ -60,12 +60,11 @@ export default function Hero() {
               className="flex justify-center lg:justify-end order-2 lg:order-1"
             >
               <div className="relative">
-                {/* Decorative background elements */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-full blur-2xl"></div>
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-500/30 to-purple-600/30 rounded-full blur-xl"></div>
+                {/* Subtle background glow */}
+                <div className="absolute -inset-6 bg-gradient-to-r from-blue-500/10 to-purple-600/10 rounded-full blur-xl"></div>
 
-                {/* Main profile image */}
-                <div className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-white/20 backdrop-blur-sm shadow-2xl">
+                {/* Main profile image container */}
+                <div className="relative w-80 h-80 rounded-full overflow-hidden border-2 border-border/20 shadow-xl bg-background">
                   {imageError ? (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white">
                       <div className="text-center">
@@ -79,16 +78,21 @@ export default function Hero() {
                       alt="Nang Dalet - API Developer"
                       width={320}
                       height={320}
-                      className="object-cover w-full h-full"
+                      className="object-cover object-center w-full h-full scale-105 hover:scale-110 transition-transform duration-500"
                       onError={() => setImageError(true)}
                       priority
                       unoptimized
+                      style={{
+                        objectPosition: "center top",
+                      }}
                     />
                   )}
                 </div>
 
-                {/* Floating status indicator */}
-                <div className="absolute bottom-6 right-6 bg-green-500 w-6 h-6 rounded-full border-4 border-white shadow-lg animate-pulse"></div>
+                {/* Professional status indicator */}
+                <div className="absolute bottom-4 right-4 bg-green-500 w-4 h-4 rounded-full border-2 border-background shadow-md">
+                  <div className="w-full h-full bg-green-400 rounded-full animate-pulse"></div>
+                </div>
               </div>
             </motion.div>
 

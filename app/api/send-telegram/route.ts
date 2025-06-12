@@ -2,26 +2,32 @@ import { type NextRequest, NextResponse } from "next/server"
 
 export const dynamic = "force-dynamic"
 
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
+
+function validateEnvVars() {
+  return {
+    valid: !!TELEGRAM_BOT_TOKEN && !!TELEGRAM_CHAT_ID,
+    botToken: !!TELEGRAM_BOT_TOKEN,
+    chatId: !!TELEGRAM_CHAT_ID,
+  }
+}
+
 export async function GET() {
   console.log("=== GET /api/send-telegram - Testing Configuration ===")
-
-  const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
-  const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
+  const { valid, botToken, chatId } = validateEnvVars()
 
   console.log("Environment check:")
-  console.log("- Bot token exists:", !!TELEGRAM_BOT_TOKEN)
-  console.log("- Chat ID exists:", !!TELEGRAM_CHAT_ID)
-  console.log("- Bot token preview:", TELEGRAM_BOT_TOKEN ? `${TELEGRAM_BOT_TOKEN.substring(0, 10)}...` : "not set")
+  console.log("- Bot token exists:", botToken)
+  console.log("- Chat ID exists:", chatId)
+  console.log("- Bot token preview:", TELEGRAM_BOT_TOKEN?.substring(0, 10) + "..." || "not set")
   console.log("- Chat ID value:", TELEGRAM_CHAT_ID || "not set")
 
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+  if (!valid) {
     return NextResponse.json(
       {
         error: "Missing environment variables",
-        details: {
-          botToken: !!TELEGRAM_BOT_TOKEN,
-          chatId: !!TELEGRAM_CHAT_ID,
-        },
+        details: { botToken, chatId },
         instructions: [
           "1. Check if .env.local exists in project root",
           "2. Verify TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are set",
@@ -34,7 +40,6 @@ export async function GET() {
   }
 
   try {
-    // Test bot token
     console.log("Testing bot token...")
     const botResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`)
     const botData = await botResponse.json()
@@ -57,7 +62,6 @@ export async function GET() {
 
     console.log("✅ Bot token valid:", botData.result)
 
-    // Test sending message
     console.log("Testing message send...")
     const testMessage = `🧪 *Test Message*
 
@@ -85,7 +89,6 @@ If you see this message, your Telegram integration is working perfectly! 🎉`
 
     if (!messageData.ok) {
       console.error("Message send failed:", messageData)
-
       let instructions = ["1. Check your chat ID is correct"]
 
       if (messageData.error_code === 400) {
@@ -140,30 +143,43 @@ If you see this message, your Telegram integration is working perfectly! 🎉`
 export async function POST(request: NextRequest) {
   console.log("=== POST /api/send-telegram - Processing Contact Form ===")
 
-  const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
-  const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
-
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-    console.error("Missing environment variables")
-    return NextResponse.json({ error: "Server configuration error", code: "MISSING_CONFIG" }, { status: 500 })
+  const { valid } = validateEnvVars()
+  if (!valid) {
+    return NextResponse.json(
+      {
+        error: "Server configuration error",
+        code: "MISSING_CONFIG",
+        message: "Telegram configuration is not set up. Please contact the administrator.",
+        fallback: {
+          email: "nangdalet@gmail.com",
+          telegram: "@nangdalet",
+        },
+      },
+      { status: 500 },
+    )
   }
 
   try {
     const formData = await request.json()
     const { name, email, subject, message } = formData
 
-    // Validation
-    const errors = []
+    const errors: string[] = []
     if (!name?.trim()) errors.push("Name is required")
     if (!email?.trim() || !email.includes("@")) errors.push("Valid email is required")
     if (!subject?.trim()) errors.push("Subject is required")
     if (!message?.trim()) errors.push("Message is required")
 
     if (errors.length > 0) {
-      return NextResponse.json({ error: "Validation failed", details: errors }, { status: 400 })
+      return NextResponse.json(
+        {
+          error: "Validation failed",
+          details: errors,
+          code: "VALIDATION_ERROR",
+        },
+        { status: 400 },
+      )
     }
 
-    // Create message
     const telegramMessage = `🔔 *New Contact Form Message*
 
 *From:* ${name.trim()}
@@ -194,7 +210,18 @@ Sent from Portfolio Website`
 
     if (!result.ok) {
       console.error("Telegram API error:", result)
-      return NextResponse.json({ error: "Failed to send message", details: result.description }, { status: 502 })
+      return NextResponse.json(
+        {
+          error: "Failed to send message",
+          details: result.description,
+          code: "TELEGRAM_API_ERROR",
+          fallback: {
+            email: "nangdalet@gmail.com",
+            telegram: "@nangdalet",
+          },
+        },
+        { status: 502 },
+      )
     }
 
     console.log("✅ Contact form message sent successfully!")
@@ -207,7 +234,15 @@ Sent from Portfolio Website`
   } catch (error) {
     console.error("Error processing contact form:", error)
     return NextResponse.json(
-      { error: "Internal server error", details: error instanceof Error ? error.message : "Unknown error" },
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
+        code: "INTERNAL_ERROR",
+        fallback: {
+          email: "nangdalet@gmail.com",
+          telegram: "@nangdalet",
+        },
+      },
       { status: 500 },
     )
   }
