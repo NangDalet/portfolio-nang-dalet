@@ -47,10 +47,10 @@ const skillCategories: SkillCategory[] = [
     icon: <Database className="h-6 w-6" />,
     color: "from-purple-500 to-pink-500",
     skills: [
-      { name: "SQL Server", level: 80 },
+      { name: "SQL Server", level: 90 },
       { name: "PostgreSQL", level: 75 },
-      { name: "MySQL", level: 70 },
-      { name: "MongoDB", level: 85 },
+      { name: "MySQL", level: 90 },
+      { name: "MongoDB", level: 50 },
     ],
   },
   {

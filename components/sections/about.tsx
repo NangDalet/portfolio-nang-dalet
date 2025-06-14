@@ -39,7 +39,7 @@ export default function About() {
       location: "Phnom Penh, Cambodia",
       description:
         "Using Java and Spring Boot to maintain systems and build APIs, with MySQL as the database. Worked on projects including Visit Angkor System, Vireak Buntham Express, VET Ticket System, and VET Agency. Supported team in integrating with Red Bus and VET Digital Bus. Contributed to upgrading systems to microservices architecture for Room Management System (Backend and Mobile APIs) and transformed Vireak Buntham Express API system into microservices.",
-      highlights: ["Java", "Spring Boot", "MySQL", "Microservices", "API Integration", "Red Bus", "VET Digital Bus"],
+      highlights: ["Java", "Spring Boot", "MySQL", "Microservices", "API Integration", "Red Bus", "VET Digital Bus", "Thai Doung"],
       current: true,
     },
     {
@@ -58,7 +58,7 @@ export default function About() {
       location: "Phnom Penh, Cambodia",
       description:
         "Using C# and ASP.NET Framework to maintain systems, with SQL Server for database management. Worked on projects including building human resource systems.",
-      highlights: ["C#", "ASP.NET Framework", "HR Systems", "Inventory Management"],
+      highlights: ["C#", "ASP.NET Framework", "SQL Server", "HR Systems"],
     },
   ]
 
@@ -177,7 +177,7 @@ export default function About() {
                     <p className="text-muted-foreground">University of Management and Economics</p>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4" />
-                      <span>Phnom Penh, Cambodia</span>
+                      <span>Battambang, Cambodia</span>
                     </div>
                   </div>
                 </CardContent>

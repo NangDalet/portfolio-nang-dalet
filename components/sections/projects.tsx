@@ -85,7 +85,7 @@ const projects: Project[] = [
     description:
       "VireakBuntham Booking System is a web-based reservation platform developed using Spring Boot and MySQL.",
     image:
-      "https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=400",
+      "/vireakbuntham.png?auto=compress&cs=tinysrgb&w=400",
     tags: ["Spring Boot API", "MySQL"],
     category: "Web Development",
     year: "2023",
