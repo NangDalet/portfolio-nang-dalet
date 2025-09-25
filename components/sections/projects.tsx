@@ -26,7 +26,7 @@ const projects: Project[] = [
     description:
       "Wedding Tracker is a comprehensive Windows-based application developed using C# and SQL Server to efficiently manage wedding planning tasks.",
     image:
-      "https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=400",
+      "",
     tags: ["C#", "SQL Server"],
     category: "Windows Application",
     year: "2023",
@@ -38,7 +38,7 @@ const projects: Project[] = [
     description:
       "Student Register is a web-based school management system built with ASP.NET Core MVC, SQL Server, and Entity Framework.",
     image:
-      "https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg?auto=compress&cs=tinysrgb&w=400",
+      "",
     tags: ["ASP.NET CORE MVC", "SQL Server", "jQuery", "Bootstrap"],
     category: "Web Development",
     year: "2021",
@@ -50,7 +50,7 @@ const projects: Project[] = [
     description:
       "Sale Inventory is a Windows-based inventory and sales management system developed with C# and SQL Server.",
     image:
-      "https://images.pexels.com/photos/7567557/pexels-photo-7567557.jpeg?auto=compress&cs=tinysrgb&w=400",
+      "",
     tags: ["C#", "SQL Server"],
     category: "Data Management",
     year: "2023",
@@ -62,7 +62,7 @@ const projects: Project[] = [
     description:
       "Stock Management is a responsive inventory tracking system built with Laravel and MySQL.",
     image:
-      "https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=400",
+      "",
     tags: ["Laravel", "MySQL", "JavaScript", "CSS"],
     category: "Web Development",
     year: "2022",
@@ -74,7 +74,7 @@ const projects: Project[] = [
     description:
       "School Management is a full-stack web application built with Next.js, Spring Boot, and MySQL.",
     image:
-      "https://images.pexels.com/photos/5380642/pexels-photo-5380642.jpeg?auto=compress&cs=tinysrgb&w=400",
+      "",
     tags: ["Next.js", "Spring Boot", "MySQL"],
     category: "Full Stack",
     year: "2025",
