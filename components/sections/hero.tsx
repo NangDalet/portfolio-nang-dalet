@@ -1,223 +1,142 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { Button } from "../ui/button"
-import { ArrowDownCircle, Download, Mail, Github, Linkedin } from "lucide-react"
+import { ArrowUpRight, CheckCircle2, Download, Github, Linkedin, Mail, MapPin } from "lucide-react"
+import { Button } from "@/components/ui/button"
+
+const highlights = [
+  { value: "3+", label: "Years building software" },
+  { value: "7", label: "Featured projects" },
+  { value: "API", label: "Backend specialization" },
+]
 
 export default function Hero() {
-  const [imageError, setImageError] = useState(false)
-
-  const scrollToContact = () => {
-    const element = document.getElementById("contact")
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-
-  const scrollToProjects = () => {
-    const element = document.getElementById("projects")
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-
-  const downloadCV = () => {
-    try {
-      fetch("/cv/Nang_Dalet_CV.pdf", { method: "HEAD" })
-        .then((response) => {
-          if (response.ok) {
-            const link = document.createElement("a")
-            link.href = "/cv/Nang_Dalet_CV.pdf"
-            link.download = "Nang_Dalet_CV.pdf"
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-          } else {
-            alert("CV is currently being updated. Please contact me directly for the latest version.")
-          }
-        })
-        .catch(() => {
-          alert("CV download is temporarily unavailable. Please contact me directly.")
-        })
-    } catch (error) {
-      console.error("Error downloading CV:", error)
-      alert("CV download is temporarily unavailable. Please contact me directly.")
-    }
-  }
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container px-4 py-16 mx-auto">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Profile Image Section */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="flex justify-center lg:justify-end order-2 lg:order-1"
-            >
-              <div className="relative">
-                {/* Subtle background glow */}
-                <div className="absolute -inset-6 bg-gradient-to-r from-blue-500/10 to-purple-600/10 rounded-full blur-xl"></div>
-
-                {/* Main profile image container */}
-                <div className="relative w-80 h-80 rounded-full overflow-hidden border-2 border-border/20 shadow-xl bg-background">
-                  {imageError ? (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                      <div className="text-center">
-                        <div className="text-6xl font-bold mb-2">ND</div>
-                        <div className="text-sm opacity-80">API Developer</div>
-                      </div>
-                    </div>
-                  ) : (
-                    <Image
-                      src="/profile.jpg"
-                      alt="Nang Dalet - API Developer"
-                      width={320}
-                      height={320}
-                      className="object-cover object-center w-full h-full scale-105 hover:scale-110 transition-transform duration-500"
-                      onError={() => setImageError(true)}
-                      priority
-                      unoptimized
-                      style={{
-                        objectPosition: "center top",
-                      }}
-                    />
-                  )}
-                </div>
-
-                {/* Professional status indicator */}
-                <div className="absolute bottom-4 right-4 bg-green-500 w-4 h-4 rounded-full border-2 border-background shadow-md">
-                  <div className="w-full h-full bg-green-400 rounded-full animate-pulse"></div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Content Section */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-center lg:text-left order-1 lg:order-2"
-            >
-              {/* Greeting */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="mb-6"
-              >
-                <span className="inline-block px-4 py-2 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium mb-4">
-                  👋 Hello, I'm
-                </span>
-                <h1 className="text-5xl lg:text-6xl font-bold tracking-tight mb-4">
-                  <span className="block text-foreground mb-2">Nang</span>
-                  <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                    Dalet
-                  </span>
-                </h1>
-              </motion.div>
-
-              {/* Title and Description */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="mb-8"
-              >
-                <h2 className="text-2xl lg:text-3xl font-semibold text-muted-foreground mb-4">API Developer</h2>
-                <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
-                  Building efficient and scalable backend solutions that power modern applications. Passionate about
-                  clean code, robust APIs, and seamless integrations.
-                </p>
-              </motion.div>
-
-              {/* Action Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="flex flex-col sm:flex-row gap-4 mb-8"
-              >
-                <Button size="lg" onClick={scrollToContact} className="group">
-                  <Mail className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-                  Get in touch
-                </Button>
-                <Button variant="outline" size="lg" onClick={scrollToProjects} className="group">
-                  View my work
-                  <ArrowDownCircle className="h-4 w-4 ml-2 group-hover:translate-y-1 transition-transform" />
-                </Button>
-                <Button variant="secondary" size="lg" onClick={downloadCV} className="group">
-                  <Download className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-                  Download CV
-                </Button>
-              </motion.div>
-
-              {/* Social Links */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="flex justify-center lg:justify-start gap-4"
-              >
-                <a
-                  href="https://github.com/NangDalet"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-muted hover:bg-muted/80 rounded-full transition-all hover:scale-110 group"
-                >
-                  <Github className="h-5 w-5 group-hover:rotate-12 transition-transform" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/nang-dalet-3bb444231"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-muted hover:bg-muted/80 rounded-full transition-all hover:scale-110 group"
-                >
-                  <Linkedin className="h-5 w-5 group-hover:rotate-12 transition-transform" />
-                </a>
-                <a
-                  href="mailto:nangdalet@gmail.com"
-                  className="p-3 bg-muted hover:bg-muted/80 rounded-full transition-all hover:scale-110 group"
-                >
-                  <Mail className="h-5 w-5 group-hover:rotate-12 transition-transform" />
-                </a>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
+    <section id="home" className="relative overflow-hidden pb-20 pt-28 sm:pt-32 lg:min-h-screen lg:pb-24">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]" />
+        <div className="absolute -right-32 top-48 h-80 w-80 rounded-full bg-cyan-500/10 blur-[100px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.35)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.35)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:linear-gradient(to_bottom,black,transparent_80%)]" />
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <button
-          onClick={() => {
-            const element = document.getElementById("about")
-            if (element) {
-              element.scrollIntoView({ behavior: "smooth" })
-            }
-          }}
-          className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
-          aria-label="Scroll down"
+      <div className="section-shell grid items-center gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, ease: "easeOut" }}
+          className="max-w-3xl"
         >
-          <span className="text-sm font-medium">Scroll down</span>
-          <ArrowDownCircle className="h-6 w-6 animate-bounce group-hover:scale-110 transition-transform" />
-        </button>
-      </motion.div>
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-2 text-sm font-semibold text-primary">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            </span>
+            Available for software opportunities
+          </div>
 
-      {/* Background decorative elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl"></div>
-      <div className="absolute bottom-20 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl"></div>
-      <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-      <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-purple-500 rounded-full animate-pulse delay-1000"></div>
+          <p className="mb-3 text-sm font-bold uppercase tracking-[0.24em] text-muted-foreground">Hello, I&apos;m Nang Dalet</p>
+          <h1 className="text-balance text-4xl font-black leading-[1.08] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
+            Software developer building <span className="text-gradient">reliable digital products.</span>
+          </h1>
+          <p className="mt-6 max-w-2xl text-balance text-lg leading-8 text-muted-foreground sm:text-xl">
+            I design and develop scalable APIs, backend systems, and full-stack applications that turn complex
+            requirements into secure, maintainable software.
+          </p>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Button asChild size="lg" className="h-12 rounded-xl px-6 shadow-lg shadow-primary/20">
+              <a href="#projects">
+                Explore my work <ArrowUpRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-12 rounded-xl px-6 bg-background/50">
+              <a href="#contact">
+                Let&apos;s work together <Mail className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+            <Button asChild variant="ghost" size="lg" className="h-12 rounded-xl px-5">
+              <a href="/cv/Nang_Dalet_CV.pdf" download>
+                <Download className="mr-2 h-4 w-4" /> Resume
+              </a>
+            </Button>
+          </div>
+
+          <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted-foreground">
+            <span className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-primary" /> Phnom Penh, Cambodia
+            </span>
+            <span className="hidden h-4 w-px bg-border sm:block" />
+            <div className="flex items-center gap-2">
+              <a
+                href="https://github.com/NangDalet"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg p-2 transition-colors hover:bg-muted hover:text-foreground"
+                aria-label="GitHub"
+              >
+                <Github className="h-4 w-4" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/nang-dalet-3bb444231"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg p-2 transition-colors hover:bg-muted hover:text-foreground"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-10 grid max-w-2xl grid-cols-3 gap-3 border-t border-border/70 pt-6">
+            {highlights.map((item) => (
+              <div key={item.label}>
+                <p className="text-2xl font-black tracking-tight sm:text-3xl">{item.value}</p>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground sm:text-sm">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92, x: 24 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
+          className="relative mx-auto w-full max-w-md"
+        >
+          <div className="absolute -inset-5 rounded-[2.5rem] bg-gradient-to-br from-primary/25 via-cyan-500/10 to-transparent blur-2xl" />
+          <div className="glass-panel relative overflow-hidden rounded-[2rem] p-3">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.45rem] bg-muted">
+              <Image
+                src="/profile.jpg"
+                alt="Nang Dalet, Software Developer"
+                fill
+                sizes="(max-width: 1024px) 90vw, 420px"
+                className="object-cover object-top"
+                priority
+              />
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-emerald-950/90 via-emerald-950/20 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+                <div className="mb-2 flex items-center gap-2 text-sm text-emerald-100">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  Building production-ready systems
+                </div>
+                <p className="text-2xl font-bold">Backend-first. Product-minded.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="glass-panel absolute -left-5 top-12 hidden rounded-2xl px-4 py-3 shadow-xl sm:block">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Core stack</p>
+            <p className="mt-1 text-sm font-bold">Java · Spring Boot · .NET</p>
+          </div>
+          <div className="glass-panel absolute -bottom-5 -right-4 rounded-2xl px-4 py-3 shadow-xl">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Focus</p>
+            <p className="mt-1 text-sm font-bold">APIs & Microservices</p>
+          </div>
+        </motion.div>
+      </div>
     </section>
   )
 }

@@ -2,32 +2,35 @@ import { type NextRequest, NextResponse } from "next/server"
 
 export const dynamic = "force-dynamic"
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
+function getTelegramConfig() {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim()
+  const chatId = process.env.TELEGRAM_CHAT_ID?.trim()
+  const missing = [
+    !botToken ? "TELEGRAM_BOT_TOKEN" : null,
+    !chatId ? "TELEGRAM_CHAT_ID" : null,
+  ].filter((name): name is string => name !== null)
 
-function validateEnvVars() {
   return {
-    valid: !!TELEGRAM_BOT_TOKEN && !!TELEGRAM_CHAT_ID,
-    botToken: !!TELEGRAM_BOT_TOKEN,
-    chatId: !!TELEGRAM_CHAT_ID,
+    botToken,
+    chatId,
+    missing,
   }
 }
 
 export async function GET() {
   console.log("=== GET /api/send-telegram - Testing Configuration ===")
-  const { valid, botToken, chatId } = validateEnvVars()
+  const { botToken, chatId, missing } = getTelegramConfig()
 
   console.log("Environment check:")
-  console.log("- Bot token exists:", botToken)
-  console.log("- Chat ID exists:", chatId)
-  console.log("- Bot token preview:", TELEGRAM_BOT_TOKEN?.substring(0, 10) + "..." || "not set")
-  console.log("- Chat ID value:", TELEGRAM_CHAT_ID || "not set")
+  console.log("- Bot token exists:", !!botToken)
+  console.log("- Chat ID exists:", !!chatId)
 
-  if (!valid) {
+  if (missing.length > 0) {
     return NextResponse.json(
       {
         error: "Missing environment variables",
-        details: { botToken, chatId },
+        code: "MISSING_CONFIG",
+        missing,
         instructions: [
           "1. Check if .env.local exists in project root",
           "2. Verify TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are set",
@@ -41,7 +44,7 @@ export async function GET() {
 
   try {
     console.log("Testing bot token...")
-    const botResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`)
+    const botResponse = await fetch(`https://api.telegram.org/bot${botToken}/getMe`)
     const botData = await botResponse.json()
 
     if (!botData.ok) {
@@ -68,18 +71,18 @@ export async function GET() {
 This is a test from your portfolio website!
 
 ✅ Bot token: Valid
-✅ Chat ID: ${TELEGRAM_CHAT_ID}
+✅ Chat ID: Configured
 ✅ API connection: Working
 
 *Timestamp:* ${new Date().toISOString()}
 
 If you see this message, your Telegram integration is working perfectly! 🎉`
 
-    const messageResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    const messageResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
+        chat_id: chatId,
         text: testMessage,
         parse_mode: "Markdown",
       }),
@@ -143,13 +146,15 @@ If you see this message, your Telegram integration is working perfectly! 🎉`
 export async function POST(request: NextRequest) {
   console.log("=== POST /api/send-telegram - Processing Contact Form ===")
 
-  const { valid } = validateEnvVars()
-  if (!valid) {
+  const { botToken, chatId, missing } = getTelegramConfig()
+  if (missing.length > 0) {
+    console.error(`Telegram configuration is missing: ${missing.join(", ")}`)
     return NextResponse.json(
       {
         error: "Server configuration error",
         code: "MISSING_CONFIG",
         message: "Telegram configuration is not set up. Please contact the administrator.",
+        missing,
         fallback: {
           email: "nangdalet@gmail.com",
           telegram: "@nangdalet",
@@ -196,11 +201,11 @@ Sent from Portfolio Website`
 
     console.log("Sending contact form message to Telegram...")
 
-    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
+        chat_id: chatId,
         text: telegramMessage,
         parse_mode: "Markdown",
       }),

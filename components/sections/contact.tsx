@@ -114,38 +114,40 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-20 bg-background">
-      <div className="container px-4 mx-auto">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+    <section id="contact" className="border-y border-border/60 bg-muted/30 py-24">
+      <div className="section-shell">
+        <div>
+          <div className="mb-12 max-w-2xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
-              <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Have a project in mind or want to discuss a potential collaboration? I'd love to hear from you. Reach
-                out using the form below or contact me directly.
+              <span className="text-sm font-bold uppercase tracking-[0.22em] text-primary">Get in touch</span>
+              <h2 className="mt-4 text-balance text-3xl font-black tracking-tight sm:text-5xl">
+                Let&apos;s build something useful.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-muted-foreground">
+                Have a role, product, or collaboration in mind? Send me a message and I&apos;ll get back to you as soon
+                as possible.
               </p>
             </motion.div>
           </div>
 
-          <div className="grid md:grid-cols-5 gap-12">
+          <div className="grid gap-6 md:grid-cols-5">
             <motion.div
-              className="md:col-span-2 space-y-8"
+              className="space-y-8 rounded-2xl border border-border/70 bg-card/70 p-6 md:col-span-2 sm:p-8"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
             >
               <div>
-                <h3 className="text-xl font-semibold mb-6">Contact Information</h3>
-                <div className="space-y-4">
+                <h3 className="mb-6 text-xl font-bold">Contact information</h3>
+                <div className="space-y-5">
                   <div className="flex items-start">
-                    <div className="mr-4 p-2 bg-primary/10 rounded-full">
+                    <div className="mr-4 rounded-xl bg-primary/10 p-2.5">
                       <Mail className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -160,7 +162,7 @@ export default function Contact() {
                   </div>
 
                   <div className="flex items-start">
-                    <div className="mr-4 p-2 bg-primary/10 rounded-full">
+                    <div className="mr-4 rounded-xl bg-primary/10 p-2.5">
                       <Phone className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -172,7 +174,7 @@ export default function Contact() {
                   </div>
 
                   <div className="flex items-start">
-                    <div className="mr-4 p-2 bg-primary/10 rounded-full">
+                    <div className="mr-4 rounded-xl bg-primary/10 p-2.5">
                       <MapPin className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -182,7 +184,7 @@ export default function Contact() {
                   </div>
 
                   <div className="flex items-start">
-                    <div className="mr-4 p-2 bg-primary/10 rounded-full">
+                    <div className="mr-4 rounded-xl bg-primary/10 p-2.5">
                       <MessageCircle className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -199,11 +201,11 @@ export default function Contact() {
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-6">Connect With Me</h3>
+                <h3 className="mb-5 text-sm font-bold uppercase tracking-widest text-muted-foreground">Connect</h3>
                 <div className="flex space-x-4">
                   <a
                     href="https://github.com/NangDalet"
-                    className="p-3 bg-card hover:bg-primary/10 rounded-full transition-colors"
+                    className="rounded-xl border border-border p-3 transition-colors hover:border-primary/30 hover:bg-primary/10"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -212,7 +214,7 @@ export default function Contact() {
                   </a>
                   <a
                     href="https://www.linkedin.com/in/nang-dalet-3bb444231"
-                    className="p-3 bg-card hover:bg-primary/10 rounded-full transition-colors"
+                    className="rounded-xl border border-border p-3 transition-colors hover:border-primary/30 hover:bg-primary/10"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -221,7 +223,7 @@ export default function Contact() {
                   </a>
                   <button
                     onClick={openTelegramChat}
-                    className="p-3 bg-card hover:bg-primary/10 rounded-full transition-colors"
+                    className="rounded-xl border border-border p-3 transition-colors hover:border-primary/30 hover:bg-primary/10"
                   >
                     <MessageCircle className="h-5 w-5" />
                     <span className="sr-only">Telegram</span>
@@ -250,14 +252,18 @@ export default function Contact() {
             </motion.div>
 
             <motion.div
-              className="md:col-span-3"
+              className="rounded-2xl border border-border/70 bg-card/70 p-6 shadow-xl shadow-primary/5 md:col-span-3 sm:p-8"
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
               viewport={{ once: true }}
             >
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                  <div className="mb-6">
+                    <h3 className="text-xl font-bold">Send a message</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">All fields are required.</p>
+                  </div>
                   <FormField
                     control={form.control}
                     name="name"
@@ -265,7 +271,7 @@ export default function Contact() {
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your name" {...field} />
+                          <Input className="h-11 bg-background/60" placeholder="Your name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -278,7 +284,7 @@ export default function Contact() {
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input type="email" placeholder="you@example.com" {...field} />
+                          <Input className="h-11 bg-background/60" type="email" placeholder="you@example.com" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -291,7 +297,7 @@ export default function Contact() {
                       <FormItem>
                         <FormLabel>Subject</FormLabel>
                         <FormControl>
-                          <Input placeholder="Subject" {...field} />
+                          <Input className="h-11 bg-background/60" placeholder="Subject" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -304,17 +310,17 @@ export default function Contact() {
                       <FormItem>
                         <FormLabel>Message</FormLabel>
                         <FormControl>
-                          <Textarea rows={6} placeholder="Your message" {...field} />
+                          <Textarea className="min-h-36 bg-background/60" rows={6} placeholder="Tell me about your project or opportunity" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <div className="flex gap-4">
-                    <Button type="submit" disabled={isSubmitting} className="flex-1">
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button type="submit" disabled={isSubmitting} className="h-11 flex-1 rounded-xl">
                       {isSubmitting ? "Sending..." : "Send Message"} <Send className="ml-2 h-4 w-4" />
                     </Button>
-                    <Button type="button" variant="outline" onClick={openEmailClient}>
+                    <Button type="button" variant="outline" onClick={openEmailClient} className="h-11 rounded-xl">
                       <Mail className="h-4 w-4 mr-2" />
                       Email
                     </Button>

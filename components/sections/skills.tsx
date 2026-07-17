@@ -1,145 +1,101 @@
 "use client"
 
-import type React from "react"
 import { motion } from "framer-motion"
-import { Code2, ServerCrash, Database, Terminal, LayoutGrid } from "lucide-react"
-import { Progress } from "@/components/ui/progress"
+import { Braces, Database, GitBranch, Layers3, Server } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
 
-type Skill = {
-  name: string
-  level: number
-}
-
-type SkillCategory = {
-  name: string
-  icon: React.ReactNode
-  color: string
-  skills: Skill[]
-}
-
-const skillCategories: SkillCategory[] = [
+const skillGroups = [
   {
-    name: "Frontend Development",
-    icon: <Code2 className="h-6 w-6" />,
-    color: "from-blue-500 to-cyan-500",
-    skills: [
-      { name: "React.js", level: 50 },
-      { name: "Next.js", level: 50 },
-      { name: "JavaScript", level: 70 },
-      { name: "jQuery", level: 80 },
-      { name: "HTML & CSS", level: 80 },
-    ],
+    title: "Backend & APIs",
+    description: "Reliable services, integrations, and business logic.",
+    icon: Server,
+    skills: ["Java", "Spring Boot", "C#", "ASP.NET Core", "REST APIs", "Microservices"],
   },
   {
-    name: "Backend Development",
-    icon: <ServerCrash className="h-6 w-6" />,
-    color: "from-green-500 to-emerald-500",
-    skills: [
-      { name: "C# Windows Form Application", level: 85 },
-      { name: "ASP.NET CORE MVC", level: 85 },
-      { name: "ASP.NET CORE API", level: 90 },
-      { name: "Spring Boot", level: 90 },
-      { name: "Microservice", level: 65 },
-    ],
+    title: "Frontend",
+    description: "Responsive interfaces for modern web products.",
+    icon: Braces,
+    skills: ["Next.js", "React", "JavaScript", "TypeScript", "Tailwind CSS", "jQuery"],
   },
   {
-    name: "Database & Cloud",
-    icon: <Database className="h-6 w-6" />,
-    color: "from-purple-500 to-pink-500",
-    skills: [
-      { name: "SQL Server", level: 90 },
-      { name: "PostgreSQL", level: 75 },
-      { name: "MySQL", level: 90 },
-      { name: "MongoDB", level: 50 },
-    ],
+    title: "Data & Storage",
+    description: "Practical data modeling and query optimization.",
+    icon: Database,
+    skills: ["MySQL", "SQL Server", "PostgreSQL", "MongoDB", "Entity Framework", "JPA"],
   },
   {
-    name: "Tools & Deployment",
-    icon: <Terminal className="h-6 w-6" />,
-    color: "from-orange-500 to-red-500",
-    skills: [
-      { name: "Git", level: 90 },
-      { name: "Docker", level: 75 },
-      { name: "CI/CD", level: 80 },
-      { name: "Testing", level: 75 },
-    ],
+    title: "Delivery & Quality",
+    description: "Repeatable workflows from commit to production.",
+    icon: GitBranch,
+    skills: ["Git", "Docker", "CI/CD", "Testing", "API Documentation", "System Integration"],
   },
 ]
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-20 bg-background">
-      <div className="container px-4 mx-auto">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">My Skills</h2>
-              <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Here's an overview of my technical skills and competencies across different domains.
-              </p>
-            </motion.div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            {skillCategories.map((category, index) => (
-              <motion.div
-                key={category.name}
-                className="space-y-6"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`p-2 rounded-lg bg-gradient-to-br ${category.color} text-white`}>
-                    {category.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold">{category.name}</h3>
-                </div>
-
-                <div className="space-y-4">
-                  {category.skills.map((skill) => (
-                    <div key={skill.name}>
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm font-medium">{skill.name}</span>
-                        <span className="text-sm text-muted-foreground">{skill.level}%</span>
-                      </div>
-                      <Progress value={skill.level} className="h-2" />
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
+    <section id="skills" className="border-y border-border/60 bg-muted/30 py-24">
+      <div className="section-shell">
+        <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
           <motion.div
-            className="mt-16 p-6 bg-card rounded-lg border shadow-sm"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            transition={{ duration: 0.5 }}
             viewport={{ once: true }}
+            className="lg:sticky lg:top-28 lg:self-start"
           >
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <LayoutGrid className="h-5 w-5 text-primary" />
-              <span>Other Technologies I Work With</span>
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {["Vue.js", "REST APIs", "Vercel", "GitHub Actions", "Kubernetes"].map((tech) => (
-                <span
-                  key={tech}
-                  className="px-3 py-1 bg-secondary text-secondary-foreground rounded-full text-sm"
-                >
-                  {tech}
-                </span>
-              ))}
+            <span className="text-sm font-bold uppercase tracking-[0.22em] text-primary">Technical toolkit</span>
+            <h2 className="mt-4 text-balance text-3xl font-black tracking-tight sm:text-5xl">
+              The tools I use to ship dependable software.
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-muted-foreground">
+              My strongest work sits at the intersection of backend engineering, API design, and practical product
+              delivery. I choose technology based on the problem—not the trend.
+            </p>
+
+            <div className="mt-8 rounded-2xl border border-primary/20 bg-primary/10 p-5">
+              <Layers3 className="h-6 w-6 text-primary" />
+              <p className="mt-3 font-bold">Backend-first, full-stack capable</p>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Comfortable owning database design, API implementation, integration, and the frontend experience that
+                consumes it.
+              </p>
             </div>
           </motion.div>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            {skillGroups.map((group, index) => {
+              const Icon = group.icon
+              return (
+                <motion.div
+                  key={group.title}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: index * 0.08 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="group h-full border-border/70 bg-card/70 transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-xl hover:shadow-primary/5">
+                    <CardContent className="p-6">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <h3 className="mt-5 text-xl font-bold">{group.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">{group.description}</p>
+                      <div className="mt-5 flex flex-wrap gap-2">
+                        {group.skills.map((skill) => (
+                          <span
+                            key={skill}
+                            className="rounded-lg border border-border/80 bg-background/60 px-2.5 py-1.5 text-xs font-semibold text-foreground/80"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>
