@@ -11,8 +11,8 @@ const contactSchema = z.object({
 })
 
 function getTelegramConfig() {
-  const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim()
-  const chatId = process.env.TELEGRAM_CHAT_ID?.trim()
+  const botToken = "8658047435:AAGow6G3kOOoEmvfT_1NKEt35f4F5JG79Sc"
+  const chatId = 5009934788
 
   return {
     botToken,
