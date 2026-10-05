@@ -7,6 +7,7 @@ import { ArrowUpRight, Calendar, Github } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { TiltCard } from "@/components/three-dimensional"
 
 type Project = {
   id: number
@@ -111,7 +112,7 @@ export default function Projects() {
           <div className="max-w-2xl">
             <span className="text-sm font-bold uppercase tracking-[0.22em] text-primary">Selected work</span>
             <h2 className="mt-4 text-balance text-3xl font-black tracking-tight sm:text-5xl">
-              Products built for real workflows.
+              A few things I&apos;ve built.
             </h2>
             <p className="mt-5 text-lg leading-8 text-muted-foreground">
               A selection of backend, web, desktop, and mobile-focused projects across transport, education, inventory,
@@ -120,7 +121,7 @@ export default function Projects() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="h-auto max-w-full justify-start gap-1 overflow-x-auto rounded-xl border border-border bg-card/70 p-1.5 lg:max-w-lg lg:flex-wrap">
+            <TabsList className="glass-surface h-auto max-w-full justify-start gap-1 overflow-x-auto rounded-xl border border-border p-1.5 lg:max-w-lg lg:flex-wrap">
               {categories.map((category) => (
                 <TabsTrigger key={category} value={category} className="whitespace-nowrap rounded-lg px-3 py-2 text-xs">
                   {category}
@@ -130,7 +131,7 @@ export default function Projects() {
           </Tabs>
         </motion.div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="project-grid mt-12 grid gap-8 md:grid-cols-2">
           {filteredProjects.map((project, index) => (
             <motion.div
               key={project.id}
@@ -139,19 +140,19 @@ export default function Projects() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.06 }}
             >
-              <Card className="group flex h-full flex-col overflow-hidden border-border/70 bg-card/70 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/35 hover:shadow-2xl hover:shadow-primary/10">
-                <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+              <TiltCard className="h-full"><Card className="glass-surface group flex h-full flex-col overflow-hidden border-border/70 transition-all duration-300 hover:border-primary/35 hover:shadow-2xl hover:shadow-primary/10">
+                <div className="project-image relative aspect-[16/10] overflow-hidden bg-muted">
                   <Image
                     src={project.image || "/placeholder.svg"}
                     alt={`${project.title} project preview`}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                     unoptimized
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/50 via-transparent to-transparent opacity-60" />
-                  <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full border border-white/15 bg-emerald-950/70 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
-                    <Calendar className="h-3.5 w-3.5 text-emerald-300" /> {project.year}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent opacity-60" />
+                  <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full border border-white/15 bg-slate-950/70 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
+                    <Calendar className="h-3.5 w-3.5 text-blue-300" /> {project.year}
                   </div>
                 </div>
 
@@ -193,7 +194,7 @@ export default function Projects() {
                     </div>
                   )}
                 </CardContent>
-              </Card>
+              </Card></TiltCard>
             </motion.div>
           ))}
         </div>

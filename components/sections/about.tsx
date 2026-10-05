@@ -58,11 +58,11 @@ export default function About() {
           <div>
             <span className="text-sm font-bold uppercase tracking-[0.22em] text-primary">About me</span>
             <h2 className="mt-4 text-balance text-3xl font-black tracking-tight sm:text-5xl">
-              I build software that stays useful after launch day.
+              Built with purpose.<br />Made to last.
             </h2>
             <div className="mt-6 space-y-4 text-lg leading-8 text-muted-foreground">
               <p>
-                I&apos;m a software developer based in Phnom Penh with professional experience building backend APIs,
+                I&apos;m a software developer based in Phnom Penh with 3+ years of professional experience building backend APIs,
                 web applications, integrations, and data-driven business systems.
               </p>
               <p>
@@ -77,7 +77,7 @@ export default function About() {
             </Button>
           </div>
 
-          <Card className="overflow-hidden border-primary/20 bg-gradient-to-br from-primary/10 via-card to-card shadow-xl shadow-primary/5">
+          <Card className="glass-surface overflow-hidden border-primary/20 shadow-xl shadow-primary/5">
             <CardContent className="p-7 sm:p-8">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
@@ -134,7 +134,7 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: index * 0.08 }}
                 viewport={{ once: true }}
-                className="relative grid gap-4 rounded-2xl border border-border/70 bg-card/70 p-6 transition-colors hover:border-primary/30 sm:grid-cols-[10rem_1fr] sm:gap-8"
+                className="glass-surface relative grid gap-4 rounded-2xl border border-border/70 p-6 transition-colors hover:border-primary/30 sm:grid-cols-[10rem_1fr] sm:gap-8"
               >
                 <div className="pl-8 sm:pl-0">
                   <span className="absolute left-[1.02rem] top-7 h-2.5 w-2.5 rounded-full bg-primary ring-4 ring-background sm:left-[11.22rem]" />
@@ -163,7 +163,7 @@ export default function About() {
         </div>
 
         <div className="mt-20 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-          <Card className="border-border/70">
+          <Card className="glass-surface border-border/70">
             <CardContent className="p-7">
               <GraduationCap className="h-7 w-7 text-primary" />
               <p className="mt-5 text-sm font-bold uppercase tracking-widest text-muted-foreground">Education</p>
@@ -172,7 +172,7 @@ export default function About() {
               <p className="mt-4 text-sm font-semibold">2018 — 2022 · Battambang, Cambodia</p>
             </CardContent>
           </Card>
-          <Card className="border-border/70">
+          <Card className="glass-surface border-border/70">
             <CardContent className="p-7">
               <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Continued learning</p>
               <h3 className="mt-2 text-xl font-bold">Technical training</h3>

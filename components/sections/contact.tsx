@@ -137,7 +137,7 @@ export default function Contact() {
 
           <div className="grid gap-6 md:grid-cols-5">
             <motion.div
-              className="space-y-8 rounded-2xl border border-border/70 bg-card/70 p-6 md:col-span-2 sm:p-8"
+              className="glass-surface space-y-8 rounded-2xl border border-border/70 p-6 md:col-span-2 sm:p-8"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -252,7 +252,7 @@ export default function Contact() {
             </motion.div>
 
             <motion.div
-              className="rounded-2xl border border-border/70 bg-card/70 p-6 shadow-xl shadow-primary/5 md:col-span-3 sm:p-8"
+              className="glass-surface rounded-2xl border border-border/70 p-6 shadow-xl shadow-primary/5 md:col-span-3 sm:p-8"
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}

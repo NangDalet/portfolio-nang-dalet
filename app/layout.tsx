@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Nang Dalet | Software Developer",
   description:
-    "Software developer specializing in scalable APIs, backend systems, and full-stack digital products.",
+    "Software developer with 3+ years of experience building scalable APIs, backend systems, and full-stack digital products.",
 }
 
 export default function RootLayout({
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} overflow-x-hidden`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
           <Toaster />
         </ThemeProvider>
