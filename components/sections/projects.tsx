@@ -26,7 +26,7 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end"
+          className="flex min-w-0 flex-col justify-between gap-8 lg:flex-row lg:items-end"
         >
           <div className="max-w-2xl">
             <span className="text-sm font-bold uppercase tracking-[0.22em] text-primary">Selected work</span>
@@ -39,10 +39,10 @@ export default function Projects() {
             </p>
           </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="glass-surface h-auto max-w-full justify-start gap-1 overflow-x-auto rounded-xl border border-border p-1.5 lg:max-w-lg lg:flex-wrap">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full min-w-0 lg:w-auto">
+            <TabsList className="glass-surface flex h-auto w-full min-w-0 max-w-full justify-start gap-1 overflow-x-auto rounded-xl border border-border p-1.5 lg:max-w-lg lg:flex-wrap">
               {categories.map((category) => (
-                <TabsTrigger key={category} value={category} className="whitespace-nowrap rounded-lg px-3 py-2 text-xs">
+                <TabsTrigger key={category} value={category} className="shrink-0 whitespace-nowrap rounded-lg px-3 py-2 text-xs">
                   {category}
                 </TabsTrigger>
               ))}
@@ -50,23 +50,24 @@ export default function Projects() {
           </Tabs>
         </motion.div>
 
-        <div className="project-grid mt-12 grid gap-8 md:grid-cols-2">
+        <div className="project-grid mt-12 grid min-w-0 grid-cols-1 gap-8 md:grid-cols-2">
           {filteredProjects.map((project, index) => (
             <motion.div
               key={project.id} id={`project-${project.id}`}
               layout
+              className="w-full min-w-0"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.06 }}
             >
-              <TiltCard className="h-full"><Card className="glass-surface group flex h-full flex-col overflow-hidden border-border/70 transition-all duration-300 hover:border-primary/35 hover:shadow-2xl hover:shadow-primary/10">
-                <div className="project-image relative aspect-[16/10] overflow-hidden bg-muted">
+              <TiltCard className="h-full w-full min-w-0"><Card className="glass-surface group flex h-full w-full min-w-0 max-w-full flex-col overflow-hidden border-border/70 transition-all duration-300 hover:border-primary/35 hover:shadow-2xl hover:shadow-primary/10">
+                <div className="project-image relative shrink-0 overflow-hidden bg-muted">
                   <Image
                     src={project.image || "/placeholder.svg"}
                     alt={`${project.title} project preview`}
                     fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 767px) calc(100vw - 66px), (max-width: 1319px) 45vw, 580px"
+                    className="object-contain transition-transform duration-700 md:object-cover md:group-hover:scale-105"
                     unoptimized
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent opacity-60" />
@@ -75,7 +76,7 @@ export default function Projects() {
                   </div>
                 </div>
 
-                <CardContent className="flex flex-1 flex-col p-6">
+                <CardContent className="flex min-w-0 flex-1 flex-col break-words p-5 sm:p-6">
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">{project.category}</p>
                   <h3 className="mt-2 text-xl font-bold tracking-tight">{project.title}</h3>
                   <p className="mt-3 flex-1 text-sm leading-6 text-muted-foreground">{project.description}</p>

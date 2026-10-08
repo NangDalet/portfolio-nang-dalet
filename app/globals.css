@@ -88,7 +88,7 @@ section span.uppercase { font-size: 10px; letter-spacing: .14em; font-weight: 50
 .sphere-footer { border-top: 1px solid hsl(var(--border)); font-size: 9px; color: hsl(var(--muted-foreground)); }
 .sphere-footer button { color: hsl(var(--primary)); padding: 4px; }
 #projects .project-grid { gap: 28px; }
-.project-image { margin: 12px 12px 0; border-radius: 10px; }
+.project-image { width: calc(100% - 24px); height: 0; padding-top: calc(62.5% - 15px); margin: 12px 12px 0; border-radius: 10px; flex: none; }
 #projects .project-grid > div:nth-child(even) { margin-top: 48px; }
 #projects .project-grid > div:last-child:nth-child(odd) { grid-column: 1 / -1; max-width: calc(50% - 14px); }
 #projects .glass-surface h3 { font-size: 22px; letter-spacing: -.04em; }
