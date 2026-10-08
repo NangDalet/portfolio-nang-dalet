@@ -8,10 +8,11 @@ import Projects from "../components/sections/projects"
 import Contact from "../components/sections/contact"
 import Footer from "../components/sections/footer"
 import Header from "../components/sections/header"
+import { MotionConfig } from "framer-motion"
 
 export default function HomePage() {
   return (
-    <ErrorBoundary>
+    <MotionConfig reducedMotion="user"><ErrorBoundary>
       <Header />
       <main className="min-h-screen">
         <Hero />
@@ -22,6 +23,6 @@ export default function HomePage() {
         <Contact />
         <Footer />
       </main>
-    </ErrorBoundary>
+    </ErrorBoundary></MotionConfig>
   )
 }

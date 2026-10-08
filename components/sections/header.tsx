@@ -1,6 +1,7 @@
 "use client"
 
 import { ArrowUpRight, Menu } from "lucide-react"
+import { useEffect, useState } from "react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import {
@@ -13,13 +14,21 @@ import {
 const navigation = [
   { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
+  { label: "Work", href: "#journey" },
   { label: "Contact", href: "#contact" },
 ]
 
 export default function Header() {
+  const [reading, setReading] = useState(false)
+  useEffect(() => {
+    const update = () => { setReading((document.getElementById("home")?.getBoundingClientRect().bottom ?? 0) < 250) }
+    update()
+    window.addEventListener("scroll", update, { passive: true })
+    window.addEventListener("resize", update)
+    return () => { window.removeEventListener("scroll", update); window.removeEventListener("resize", update) }
+  }, [])
   return (
-    <header className="portfolio-nav fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
+    <header className={`portfolio-nav ${reading ? "is-reading" : ""} fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl`}>
       <div className="section-shell flex h-16 items-center justify-between">
         <a href="#home" className="group flex items-center gap-2.5" aria-label="Go to home">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 transition-transform group-hover:-rotate-3 group-hover:scale-105">
@@ -28,7 +37,7 @@ export default function Header() {
           <span className="leading-tight">
             <span className="block text-sm font-bold tracking-tight">Nang Dalet</span>
             <span className="block text-[10px] font-medium tracking-wide text-muted-foreground">
-              Developer & problem solver
+              Software in motion
             </span>
           </span>
         </a>

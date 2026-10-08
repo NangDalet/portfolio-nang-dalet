@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 
 export function TiltCard({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <div className={`tilt-card ${className}`} onPointerMove={(event) => {
@@ -10,23 +10,6 @@ export function TiltCard({ children, className = "" }: { children: ReactNode; cl
     const y = (event.clientY - box.top) / box.height - 0.5
     event.currentTarget.style.transform = `perspective(1000px) rotateX(${-y * 9}deg) rotateY(${x * 9}deg) translateY(-4px)`
   }} onPointerLeave={(event) => { event.currentTarget.style.transform = "" }}>{children}</div>
-}
-
-export function ChromeSculpture() {
-  const [paused, setPaused] = useState(false)
-  return <div className="sculpture-wrap">
-    <div className="sculpture-grid" aria-hidden="true" />
-    <div className={`sculpture-stage ${paused ? "is-paused" : ""}`} aria-hidden="true">
-      <div className="sculpture-shadow" />
-      <div className="chrome-sculpture">
-        {Array.from({ length: 7 }, (_, i) => <div key={i} className="chrome-ring" style={{ "--ring-index": i } as CSSProperties} />)}
-        <div className="sculpture-core"><span>&lt;/&gt;</span></div>
-      </div>
-    </div>
-    <span className="scene-coordinate scene-coordinate-top" aria-hidden="true">ND / DIGITAL CRAFT</span>
-    <span className="scene-coordinate scene-coordinate-bottom" aria-hidden="true">01 — ENGINEERING IN MOTION</span>
-    <button className="scene-control" onClick={() => setPaused(!paused)} aria-pressed={paused}>{paused ? "▶ Play motion" : "Ⅱ Pause motion"}</button>
-  </div>
 }
 
 const technologies = ["Java", "Spring Boot", "React", "Next.js", "TypeScript", "C#", ".NET", "MySQL", "PostgreSQL", "Docker", "Git", "REST APIs", "Tailwind", "MongoDB", "CI/CD", "Microservices"]

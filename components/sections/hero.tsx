@@ -1,47 +1,77 @@
-"use client"
+﻿"use client"
 
 import Image from "next/image"
-import { ArrowDown, ArrowUpRight, Download, Github, Linkedin, MapPin } from "lucide-react"
-import { ChromeSculpture, TiltCard } from "@/components/three-dimensional"
+import { useEffect, useRef, useState } from "react"
+import { ArrowDown, ArrowUpRight, ArrowLeft, ArrowRight, Pause, Play, Github, Download } from "lucide-react"
+import PortfolioWorld from "@/components/portfolio-world"
+import { projects } from "@/lib/projects"
 
 export default function Hero() {
-  return (
-    <section id="home" className="portfolio-hero relative overflow-hidden">
-      <div className="section-shell">
-        <div className="hero-composition">
-          <div className="hero-copy">
-            <div className="hero-identity"><span className="identity-line" /> Nang Dalet <span>/ Software Developer</span></div>
-            <h1 className="hero-headline">Thoughtful code.<br /><span>Real-world<br className="headline-mobile-break" /> impact.</span></h1>
-            <p className="hero-description">I turn complex problems into reliable software. With 3+ years of experience, I build the APIs, backend systems, and interfaces that bring products to life.</p>
-            <div className="hero-actions">
-              <a className="editorial-button" href="#projects">View selected work <ArrowUpRight className="h-4 w-4" /></a>
-              <a className="resume-link" href="/cv/Nang_Dalet_CV.pdf" download><Download className="h-4 w-4" /> Download CV</a>
-            </div>
-            <div className="hero-proof">
-              <div><strong>3<span>+</span></strong><span>Years of experience</span></div>
-              <div><strong>7</strong><span>Featured projects</span></div>
-              <div><strong className="proof-specialty">Backend</strong><span>Full-stack capable</span></div>
-            </div>
-          </div>
-          <div className="hero-art hero-art-portrait">
-            <ChromeSculpture />
-            <div className="portrait-orbit" aria-hidden="true" />
-            <TiltCard className="hero-portrait-card">
-              <div className="hero-portrait-photo">
-                <Image src="/profile.jpg" alt="Portrait of Nang Dalet, software developer" fill priority sizes="(max-width: 767px) 85vw, (max-width: 1023px) 42vw, 480px" className="object-cover object-top" />
-                <div className="hero-portrait-caption"><p>Nang Dalet<span>Software Developer</span></p></div>
-              </div>
-            </TiltCard>
-            <div className="portrait-status glass-surface"><span className="status-dot" /><div><span>Good software starts with a conversation.</span><a href="#contact">Let&apos;s build something <ArrowUpRight className="h-4 w-4" /></a></div></div>
-            <div className="portrait-stack glass-surface"><span className="mono-label">CORE STACK</span><p>Java <span>/</span> Spring Boot <span>/</span> .NET</p></div>
-          </div>
-        </div>
-        <div className="hero-bottomline">
-          <span className="flex items-center gap-2"><MapPin className="h-3.5 w-3.5" /> Based in Phnom Penh, Cambodia</span>
-          <div className="hero-socials"><a href="https://github.com/NangDalet" target="_blank" rel="noopener noreferrer"><Github className="h-4 w-4" /> GitHub <ArrowUpRight className="h-3 w-3" /></a><a href="https://www.linkedin.com/in/nang-dalet-3bb444231" target="_blank" rel="noopener noreferrer"><Linkedin className="h-4 w-4" /> LinkedIn <ArrowUpRight className="h-3 w-3" /></a></div>
-          <a href="#projects" className="flex items-center gap-3">Explore below <ArrowDown className="h-4 w-4" /></a>
-        </div>
+  const root = useRef<HTMLElement>(null)
+  const progress = useRef(0)
+  const chapterRef = useRef(0)
+  const [chapter, setChapter] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const project = chapter > 0 ? projects[chapter - 1] : null
+
+  useEffect(() => {
+    const section = root.current
+    if (!section) return
+    const update = () => {
+      const rect = section.getBoundingClientRect()
+      const p = Math.max(0, Math.min(1, -rect.top / Math.max(1, section.offsetHeight - window.innerHeight)))
+      progress.current = p
+      section.style.setProperty("--journey-progress", `${p * 100}%`)
+      const current = Math.round(p * projects.length)
+      if (current !== chapterRef.current) { chapterRef.current = current; setChapter(current) }
+    }
+    update()
+    window.addEventListener("scroll", update, { passive: true })
+    window.addEventListener("resize", update)
+    return () => { window.removeEventListener("scroll", update); window.removeEventListener("resize", update) }
+  }, [])
+
+  const jump = (index: number) => {
+    const section = root.current
+    if (!section) return
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    if (index > projects.length) { document.getElementById("about")?.scrollIntoView({ behavior: reduced ? "instant" : "smooth" }); return }
+    const top = window.scrollY + section.getBoundingClientRect().top
+    const distance = section.offsetHeight - window.innerHeight
+    window.scrollTo({ top: top + distance * index / projects.length, behavior: reduced ? "instant" : "smooth" })
+  }
+
+  return <section ref={root} id="home" className={`cinematic-hero ${project ? "is-exploring" : "is-entrance"}`} aria-label="Interactive portfolio journey">
+    <div id="journey" className="journey-anchor" aria-hidden="true" />
+    <div className="world-stage">
+      <PortfolioWorld progress={progress} paused={paused} />
+      <div className="world-topline"><span>INDEPENDENT DEVELOPER<br /><b>PHNOM PENH, CAMBODIA</b></span><span className="world-coordinate">11°33′ N / 104°55′ E</span></div>
+      <div className="world-intro" aria-hidden={!!project}>
+        <p className="world-eyebrow">NANG DALET / SOFTWARE DEVELOPER</p>
+        <h1>Engineering.<br /><em>In motion.</em></h1>
+        <p className="world-description">A world of ideas, connected by code.<br />Explore the systems and experiences I build.</p>
+        <button className="world-enter" onClick={() => jump(1)} tabIndex={project ? -1 : 0}>Enter my world <ArrowRight size={15} /></button>
       </div>
-    </section>
-  )
+      {project && <div className="world-project-copy" key={project.id} aria-live="polite">
+        <p className="world-eyebrow">SELECTED WORK / {String(chapter).padStart(2, "0")} — {project.year}</p>
+        <h2>{project.title}</h2>
+        <p>{project.description}</p>
+        <div className="world-project-tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
+        <a className="world-enter" href={`#project-${project.id}`}>Explore project <ArrowUpRight size={15} /></a>
+      </div>}
+      {project && <div className="world-static-preview"><Image src={project.image} alt={`${project.title} preview`} fill sizes="(max-width: 767px) 80vw, 45vw" className="object-contain" /></div>}
+      <aside className="world-chapters" aria-label="Choose a scene">
+        <span>EXPLORE</span>
+        <button onClick={() => jump(0)} aria-label="Return to entrance scene" aria-current={chapter === 0 ? "step" : undefined}><i />00</button>
+        {projects.map((item, index) => <button key={item.id} onClick={() => jump(index + 1)} aria-label={`Explore ${item.title} in 3D`} aria-current={chapter === index + 1 ? "step" : undefined}><i />{String(index + 1).padStart(2, "0")}</button>)}
+      </aside>
+      <div className="world-bottom">
+        <div className="world-bottom-left"><a href="/cv/Nang_Dalet_CV.pdf" download><Download size={13} /> RESUME</a><a href="https://github.com/NangDalet" target="_blank" rel="noopener noreferrer"><Github size={13} /> GITHUB</a><a href="#projects">VIEW ALL WORK <ArrowUpRight size={12} /></a></div>
+        <span className="world-scroll-hint">{project ? "SCROLL TO TRAVEL" : "SCROLL TO DISCOVER"}<ArrowDown size={13} /></span>
+        <div className="world-controls"><button aria-label={paused ? "Resume ambient motion" : "Pause ambient motion"} aria-pressed={paused} onClick={() => setPaused(!paused)}>{paused ? <Play size={13} /> : <Pause size={13} />}</button><button onClick={() => jump(chapter - 1)} disabled={chapter === 0} aria-label="Previous scene"><ArrowLeft size={15} /></button><button onClick={() => jump(chapter + 1)} aria-label={chapter === projects.length ? "Continue to about me" : "Next scene"}><ArrowRight size={15} /></button><span>{String(chapter).padStart(2, "0")} / 07</span></div>
+      </div>
+      <div className="world-progress" aria-hidden="true"><i /></div>
+      <a className="world-skip" href="#about">Skip to about me <ArrowDown size={11} /></a>
+    </div>
+  </section>
 }
