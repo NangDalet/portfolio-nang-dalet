@@ -34,7 +34,7 @@ export default function Projects() {
               A few things I&apos;ve built.
             </h2>
             <p className="mt-5 text-lg leading-8 text-muted-foreground">
-              A selection of backend, web, desktop, and mobile-focused projects across transport, education, inventory,
+              A selection of backend, web, desktop, and mobile-focused projects across personal finance, transport, education, inventory,
               and operations.
             </p>
           </div>

@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, type RefObject } from "react"
 import Image from "next/image"
 import { projects } from "@/lib/projects"
+import { auroraFragmentShader, auroraVertexShader } from "@/lib/aurora-shader"
+import CodeBackground from "@/components/code-background"
 
 type Props = { progress: RefObject<number>; paused: boolean }
 
@@ -42,6 +44,20 @@ export default function PortfolioWorld({ progress, paused }: Props) {
       const textures: InstanceType<typeof T.Texture>[] = []
       const keepGeometry = <G extends InstanceType<typeof T.BufferGeometry>>(geometry: G): G => { geometries.push(geometry); return geometry }
       const keepMaterial = <M extends InstanceType<typeof T.Material>>(material: M): M => { materials.push(material); return material }
+      const atmosphere = new T.Scene()
+      const atmosphereCamera = new T.OrthographicCamera(-1, 1, 1, -1, 0, 1)
+      const atmosphereMaterial = keepMaterial(new T.ShaderMaterial({
+        uniforms: { time: { value: 0 }, aspect: { value: 1 }, pointer: { value: new T.Vector2() } },
+        vertexShader: auroraVertexShader,
+        fragmentShader: auroraFragmentShader,
+        depthWrite: false,
+        depthTest: false,
+        toneMapped: false,
+      }))
+      const atmospherePlane = new T.Mesh(keepGeometry(new T.PlaneGeometry(2, 2)), atmosphereMaterial)
+      atmospherePlane.frustumCulled = false
+      atmosphere.add(atmospherePlane)
+      renderer.autoClear = false
       let seed = 42
       const random = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296 }
 
@@ -81,7 +97,7 @@ export default function PortfolioWorld({ progress, paused }: Props) {
       for (let i = 0; i < 60; i++) {
         dummy.position.set((random() - 0.5) * 22, (random() - 0.5) * 11, -random() * 72)
         dummy.rotation.set(random() * 6, random() * 6, random() * 6)
-        const scale = 0.4 + random() * 1.2
+        const scale = 0.3 + random() * (window.innerWidth < 768 ? 0.5 : 0.85)
         dummy.scale.set(scale, scale * (1 + random() * 2), scale * 0.45)
         dummy.updateMatrix(); shards.setMatrixAt(i, dummy.matrix)
       }
@@ -126,19 +142,33 @@ export default function PortfolioWorld({ progress, paused }: Props) {
       const panels: InstanceType<typeof T.Mesh>[] = []
       const panelGroups: InstanceType<typeof T.Group>[] = []
       const panelGeometry = keepGeometry(new T.PlaneGeometry(6.3, 3.9))
+      const chassisGeometry = keepGeometry(new T.BoxGeometry(6.5, 4.1, 0.16))
+      const chassisMaterial = keepMaterial(new T.MeshStandardMaterial({ color: 0x132b3b, metalness: 0.8, roughness: 0.3 }))
       const frameGeometry = keepGeometry(new T.EdgesGeometry(panelGeometry))
       const frameMaterial = keepMaterial(new T.LineBasicMaterial({ color: 0x8fcde4, transparent: true, opacity: 0.38 }))
       projects.forEach((project, index) => {
         const group = new T.Group()
         group.position.set(index % 2 === 0 ? 1.6 : -1.6, 0.45, -8 * (index + 1))
         group.rotation.y = index % 2 === 0 ? -0.12 : 0.12
-        const texture = loader.load(project.image, () => { if (!disposed) requestRender() })
+        const texture = loader.load(project.image, loaded => {
+          if (disposed) return
+          // Fit the screen to the actual screenshot instead of stretching its contents.
+          const image = loaded.image as HTMLImageElement
+          const aspect = image.width / image.height
+          const width = Math.min(6.3, 3.9 * aspect)
+          const height = width / aspect
+          panel.scale.set(width / 6.3, height / 3.9, 1)
+          requestRender()
+        })
         texture.colorSpace = T.SRGBColorSpace
         textures.push(texture)
-        const material = keepMaterial(new T.MeshBasicMaterial({ map: texture, color: 0xc8dbea, side: T.DoubleSide, transparent: true, opacity: 0.92 }))
+        const material = keepMaterial(new T.MeshBasicMaterial({ map: texture, side: T.DoubleSide, toneMapped: false }))
         const panel = new T.Mesh(panelGeometry, material)
+        panel.position.z = 0.1
         panel.userData.projectId = project.id
         panels.push(panel); group.add(panel)
+        const chassis = new T.Mesh(chassisGeometry, chassisMaterial)
+        group.add(chassis)
         group.add(new T.LineSegments(frameGeometry, frameMaterial))
         // A halo behind each project separates the panels from the deep particle field.
         const halo = new T.Mesh(keepGeometry(new T.TorusGeometry(3, 0.013, 8, 120)), keepMaterial(new T.MeshBasicMaterial({ color: index % 2 ? 0xba6aff : 0x4ad9ff, transparent: true, opacity: 0.3 })))
@@ -152,20 +182,32 @@ export default function PortfolioWorld({ progress, paused }: Props) {
       rim.position.set(-5, -2, 2); scene.add(rim)
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)")
       const pointer = { x: 0, y: 0 }
+      const easedPointer = { x: 0, y: 0 }
+      let travel = progress.current * projects.length
+      let hoveredPanel: InstanceType<typeof T.Object3D> | null = null
       let frame = 0, previous = 0, elapsed = 0, visible = true, contextLost = false, portrait = false
       const render = (time: number) => {
         frame = 0
         if (disposed || contextLost) return
         const active = playing.current && !reduced.matches
-        const delta = previous ? Math.min((time - previous) / 1000, 0.05) : 0
+        const delta = previous ? Math.min((time - previous) / 1000, 0.05) : 1 / 60
         previous = time
         if (active) elapsed += delta
         const p = reduced.matches ? Math.round(progress.current * projects.length) / projects.length : progress.current
-        const distance = p * projects.length
+        const targetTravel = p * projects.length
+        const damping = 1 - Math.exp(-delta * 9)
+        travel = reduced.matches || !playing.current ? targetTravel : T.MathUtils.lerp(travel, targetTravel, damping)
+        if (Math.abs(travel - targetTravel) < 0.001) travel = targetTravel
+        easedPointer.x = T.MathUtils.lerp(easedPointer.x, active ? pointer.x : 0, damping)
+        easedPointer.y = T.MathUtils.lerp(easedPointer.y, active ? pointer.y : 0, damping)
+        const distance = travel
         const focusX = Math.sin(distance * Math.PI - Math.PI / 2) * 1.6 * Math.min(1, distance) * (portrait ? 0.3 : 1)
-        camera.position.set(focusX * 0.4 + pointer.x * 0.5, pointer.y * 0.35, (portrait ? 12 : 10) - distance * 8)
+        camera.position.set(focusX * 0.4 + easedPointer.x * 0.5, easedPointer.y * 0.35, (portrait ? 12 : 10) - distance * 8)
         camera.lookAt(focusX * 0.65, 0.15, camera.position.z - 12)
         entrance.rotation.y = Math.sin(elapsed * 0.2) * 0.2
+        entrance.rotation.x = easedPointer.y * 0.12
+        inner.rotation.x = Math.sin(elapsed * 0.28) * 0.4
+        inner.rotation.y = 0.35 + Math.sin(elapsed * 0.22) * 0.55
         entrance.scale.setScalar(portrait ? 1.55 : 2.4)
         entrance.position.x = portrait ? 0 : Math.min(3.2, camera.aspect * 1.8)
         entrance.position.y = (portrait ? 1.9 : 0.65) + Math.sin(elapsed * 0.5) * 0.08
@@ -178,15 +220,24 @@ export default function PortfolioWorld({ progress, paused }: Props) {
           ribbon.rotation.y = elapsed * 0.05 + index * 0.1
         })
         panelGroups.forEach((group, index) => {
-          group.position.x = (index % 2 === 0 ? 1.6 : -1.6) * (portrait ? 0.3 : 1)
+          // Keep the focused project to the right of its HTML description on desktop.
+          group.position.x = portrait ? 0 : 3.2 + focusX * 0.35
           group.scale.setScalar(portrait ? 0.74 : 1)
-          group.position.y = (portrait ? 1.3 : 0.45) + Math.sin(elapsed * 0.35 + index) * 0.06
+          group.position.y = (portrait ? 2.1 : 0.45) + Math.sin(elapsed * 0.35 + index) * 0.06
+          const tilt = hoveredPanel === group && active ? easedPointer.x * 0.16 : 0
+          group.rotation.y = T.MathUtils.lerp(group.rotation.y, -0.12 + tilt, damping)
+          group.rotation.x = T.MathUtils.lerp(group.rotation.x, hoveredPanel === group && active ? -easedPointer.y * 0.1 : 0, damping)
           group.visible = distance > 0.35 && group.position.z - camera.position.z < -3
         })
         particleMaterial.uniforms.time.value = elapsed
+        atmosphereMaterial.uniforms.time.value = elapsed
+        atmosphereMaterial.uniforms.pointer.value.set(easedPointer.x, easedPointer.y)
         shards.rotation.z = Math.sin(elapsed * 0.05) * 0.015
+        renderer.clear()
+        renderer.render(atmosphere, atmosphereCamera)
+        renderer.clearDepth()
         renderer.render(scene, camera)
-        if (active && visible && !document.hidden) frame = requestAnimationFrame(render)
+        if ((active || travel !== targetTravel || Math.abs(easedPointer.x) + Math.abs(easedPointer.y) > 0.001) && visible && !document.hidden) frame = requestAnimationFrame(render)
       }
       function requestRender() {
         if (!frame && visible && !document.hidden && !disposed && !contextLost) { previous = 0; frame = requestAnimationFrame(render) }
@@ -195,6 +246,7 @@ export default function PortfolioWorld({ progress, paused }: Props) {
       const resize = new ResizeObserver(() => {
         const { width, height } = element!.getBoundingClientRect()
         renderer.setSize(width, height); camera.aspect = width / Math.max(height, 1)
+        atmosphereMaterial.uniforms.aspect.value = camera.aspect
         portrait = camera.aspect < 1
         camera.updateProjectionMatrix(); requestRender()
       })
@@ -209,14 +261,18 @@ export default function PortfolioWorld({ progress, paused }: Props) {
         const box = element!.getBoundingClientRect()
         pointer.x = (event.clientX - box.left) / box.width - 0.5
         pointer.y = (event.clientY - box.top) / box.height - 0.5
+        raycaster.setFromCamera(new T.Vector2(pointer.x * 2, -pointer.y * 2), camera)
+        const hit = raycaster.intersectObjects(panels).find(item => item.object.parent?.visible)
+        hoveredPanel = hit ? hit.object.parent : null
+        element!.style.cursor = hoveredPanel ? "pointer" : "default"
         requestRender()
       }
-      const resetPointer = () => { if (!playing.current) return; pointer.x = 0; pointer.y = 0; requestRender() }
+      const resetPointer = () => { pointer.x = 0; pointer.y = 0; hoveredPanel = null; element!.style.cursor = "default"; requestRender() }
       const raycaster = new T.Raycaster()
       const onClick = (event: MouseEvent) => {
         const box = element!.getBoundingClientRect()
         raycaster.setFromCamera(new T.Vector2((event.clientX - box.left) / box.width * 2 - 1, -(event.clientY - box.top) / box.height * 2 + 1), camera)
-        const hit = raycaster.intersectObjects(panels)[0]
+        const hit = raycaster.intersectObjects(panels).find(item => item.object.parent?.visible)
         if (hit) document.getElementById(`project-${hit.object.userData.projectId}`)?.scrollIntoView({ behavior: reduced.matches ? "instant" : "smooth" })
       }
       const onVisibility = () => { if (document.hidden) { cancelAnimationFrame(frame); frame = 0 } else requestRender() }
@@ -251,6 +307,7 @@ export default function PortfolioWorld({ progress, paused }: Props) {
     <div className="world-atmosphere" aria-hidden="true" />
     <div className="world-static-emblem"><Image src="/profile.jpg" alt="Nang Dalet, software developer" width={240} height={240} priority /></div>
     <div ref={host} className="world-canvas" role="img" aria-label="Immersive three-dimensional portfolio with Nang Dalet's portrait inside metallic rings, particles, and floating project previews" />
+    <CodeBackground paused={paused} />
     <div className="world-vignette" aria-hidden="true" />
   </div>
 }

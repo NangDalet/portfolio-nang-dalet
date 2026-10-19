@@ -13,7 +13,7 @@ Environment variables are loaded when the server starts, so restart the server a
 
 ## Interactive portfolio
 
-The entrance is a full-screen Three.js world inspired by the first website (Active Theory) in the supplied reference video. Scroll to travel through seven floating project panels, or use the scene index and previous/next controls. The camera responds to mouse movement; the particle field, metallic fragments, and entrance ribbons are generated locally. Project textures use the existing local screenshots. No external models or textures are required.
+The entrance is a full-screen Three.js world inspired by the first website (Active Theory) in the supplied reference video. Scroll to travel through eight floating project panels, or use the scene index and previous/next controls. The journey length follows the project count automatically. The camera responds to mouse movement; the particle field, metallic fragments, and entrance ribbons are generated locally. Project textures use the existing local screenshots. No external models or textures are required.
 
 The pause control stops ambient animation while preserving scroll navigation. Reduced-motion preferences disable ambient and cursor motion and switch the camera between stationary scenes. Rendering stops when the world leaves the viewport or the tab is hidden. Static imagery and project links remain available if WebGL is unavailable. Skip links lead directly to the conventional about and project sections.
 

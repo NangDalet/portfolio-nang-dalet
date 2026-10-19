@@ -12,6 +12,16 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    id: 8,
+    title: "Daily Expense Tracker",
+    description: "A personal finance app for tracking expenses and income, planning budgets, and exploring spending trends in USD and KHR.",
+    image: "/DailyExpenseTracker.png",
+    tags: ["Expense Tracking", "Budgeting", "USD / KHR"],
+    category: "Web Development",
+    year: "2026",
+    liveUrl: "https://daily-expense-tracker-topaz.vercel.app/",
+  },
+  {
     id: 5,
     title: "School Management",
     description: "A full-stack school operations platform built with Next.js, Spring Boot, and MySQL.",

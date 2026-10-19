@@ -41,20 +41,19 @@ export default function Hero() {
     window.scrollTo({ top: top + distance * index / projects.length, behavior: reduced ? "instant" : "smooth" })
   }
 
-  return <section ref={root} id="home" className={`cinematic-hero ${project ? "is-exploring" : "is-entrance"}`} aria-label="Interactive portfolio journey">
+  return <section ref={root} id="home" style={{ height: `${(projects.length + 1) * 100}svh` }} className={`cinematic-hero ${project ? "is-exploring" : "is-entrance"}`} aria-label="Interactive portfolio journey">
     <div id="journey" className="journey-anchor" aria-hidden="true" />
     <div className="world-stage">
       <PortfolioWorld progress={progress} paused={paused} />
       <div className="world-topline"><span>INDEPENDENT DEVELOPER<br /><b>PHNOM PENH, CAMBODIA</b></span><span className="world-coordinate">11°33′ N / 104°55′ E</span></div>
       <div className="world-intro" aria-hidden={!!project}>
-        <p className="world-eyebrow">NANG DALET / SOFTWARE DEVELOPER</p>
         <h1>Engineering.<br /><em>In motion.</em></h1>
         <p className="world-description">A world of ideas, connected by code.<br />Explore the systems and experiences I build.</p>
         <button className="world-enter" onClick={() => jump(1)} tabIndex={project ? -1 : 0}>Enter my world <ArrowRight size={15} /></button>
       </div>
       {project && <div className="world-project-copy" key={project.id} aria-live="polite">
-        <p className="world-eyebrow">SELECTED WORK / {String(chapter).padStart(2, "0")} — {project.year}</p>
         <h2>{project.title}</h2>
+        <p className="world-project-year">{project.year} / {project.category}</p>
         <p>{project.description}</p>
         <div className="world-project-tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
         <a className="world-enter" href={`#project-${project.id}`}>Explore project <ArrowUpRight size={15} /></a>
@@ -68,7 +67,7 @@ export default function Hero() {
       <div className="world-bottom">
         <div className="world-bottom-left"><a href="/cv/Nang_Dalet_CV.pdf" download><Download size={13} /> RESUME</a><a href="https://github.com/NangDalet" target="_blank" rel="noopener noreferrer"><Github size={13} /> GITHUB</a><a href="#projects">VIEW ALL WORK <ArrowUpRight size={12} /></a></div>
         <span className="world-scroll-hint">{project ? "SCROLL TO TRAVEL" : "SCROLL TO DISCOVER"}<ArrowDown size={13} /></span>
-        <div className="world-controls"><button aria-label={paused ? "Resume ambient motion" : "Pause ambient motion"} aria-pressed={paused} onClick={() => setPaused(!paused)}>{paused ? <Play size={13} /> : <Pause size={13} />}</button><button onClick={() => jump(chapter - 1)} disabled={chapter === 0} aria-label="Previous scene"><ArrowLeft size={15} /></button><button onClick={() => jump(chapter + 1)} aria-label={chapter === projects.length ? "Continue to about me" : "Next scene"}><ArrowRight size={15} /></button><span>{String(chapter).padStart(2, "0")} / 07</span></div>
+        <div className="world-controls"><button aria-label={paused ? "Resume ambient motion" : "Pause ambient motion"} aria-pressed={paused} onClick={() => setPaused(!paused)}>{paused ? <Play size={13} /> : <Pause size={13} />}</button><button onClick={() => jump(chapter - 1)} disabled={chapter === 0} aria-label="Previous scene"><ArrowLeft size={15} /></button><button onClick={() => jump(chapter + 1)} aria-label={chapter === projects.length ? "Continue to about me" : "Next scene"}><ArrowRight size={15} /></button><span>{String(chapter).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}</span></div>
       </div>
       <div className="world-progress" aria-hidden="true"><i /></div>
       <a className="world-skip" href="#about">Skip to about me <ArrowDown size={11} /></a>
